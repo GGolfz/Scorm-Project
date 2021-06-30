@@ -3,7 +3,6 @@ const cors = require('cors');
 
 const controller = require('./controller')
 const app = express()
-
 app.use(express.json())
 
 const corsMiddleware = cors({credentials:true,origin:['*','http://localhost:3000'],methods:['GET','POST','PUT']})
