@@ -1,11 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
-const uzip = require('unzip')
-const fs = require('fs')
+const fs = require("fs");
+const uzip = require("unzipper");
+const path = require("path");
 
 const fileStorage = multer.diskStorage({
-  destination: "uploads/",
+  destination: "src/uploads/",
+  filename: (req, file, cb) => cb(null, file.originalname),
 });
 
 router.get("/test", async (req, res) => {
@@ -14,26 +16,14 @@ router.get("/test", async (req, res) => {
 
 const upload = multer({ storage: fileStorage });
 router.post("/upload", upload.single("file"), async (req, res) => {
-    console.log(req)
   const file = req.file;
-  try {
-    let name = file.originalname.split(".");
-    let extName = name.pop();
-    let filename = "uploads/" + name.join(".");
-    try {
-      fs.rename(file.path, filename, () => {
-        if (extName === "zip") {
-          fs.createReadStream(filename)
-            .on("error", () => {})
-            .on("close", () => {
-              fs.unlinkSync(filename);
-            })
-            .pipe(uzip.Extract({ path: "upload/" + nstr }));
-        }
-      });
-    } catch (e) {
-      console.log(error);
-    }
-  } catch (e) {}
+  let name = file.originalname.split(".");
+  name.pop();
+  let filePath = "src/uploads/" + name.join(".");
+  let zipPath = path.join("src/uploads/"+file.originalname)
+  await fs.createReadStream(zipPath).pipe(uzip.Extract({path:filePath}))
+  await fs.unlinkSync(zipPath)
+  res.status(201).json({success:true})
+
 });
 module.exports = router;
