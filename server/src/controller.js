@@ -31,6 +31,12 @@ router.get("/course", async (req,res) => {
   const courses = await pool.query("SELECT * FROM courses");
   return res.send(courses.rows)
 })
+router.get("/course/:id", async (req,res) => {
+  const id = req.params.id
+  const course = await pool.query("SELECT * FROM courses WHERE course_id = $1",[id])
+  if(course.rowCount > 0) return res.send(course.rows[0])
+  return res.status(404)
+})
 router.post("/progess", async (req,res) => {
   const {courseId,userId,location,status,score} = req.body.courseId;
   let exist = await pool.query("SELECT * FROM progress WHERE course_id = $1 AND user_id = $2",[courseId,userId])
