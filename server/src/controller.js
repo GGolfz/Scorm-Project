@@ -37,13 +37,30 @@ router.get("/course/:id", async (req,res) => {
   if(course.rowCount > 0) return res.send(course.rows[0])
   return res.status(404)
 })
-router.post("/progess", async (req,res) => {
-  const {courseId,userId,location,status,score} = req.body.courseId;
+router.get("/progress/:id" , async (req,res) => {
+  const userId = 1;
+  const courseId = req.params.id
+  let exist = await pool.query("SELECT * FROM progress WHERE course_id = $1 AND user_id = $2",[courseId,userId])
+  if(exist.rowCount > 0) {
+    let data = exist.rows[0]
+    console.log(data)
+    return res.send({location:data.location ?? 0,completion_status:data.status == 1})
+  } else {
+    return res.send({location:0,completion_status:false})
+  }
+
+})
+router.post("/progress", async (req,res) => {
+  const {courseId,userId,location,status,score} = req.body;
   let exist = await pool.query("SELECT * FROM progress WHERE course_id = $1 AND user_id = $2",[courseId,userId])
   if(exist.rowCount > 0){
-    await pool.query("UPDATE progress SET location = $1,status = $2, score = $3 WHERE course_id = $4 AND user_id = $5",[location,status,score,courseId,userId])
+    if(exist.rows[0].status == 1) {
+      await pool.query("UPDATE progress SET location = $1 WHERE course_id = $2 AND user_id = $3",[location,courseId,userId])
+    } else {
+      await pool.query("UPDATE progress SET location = $1,status = $2, score = $3 WHERE course_id = $4 AND user_id = $5",[location,status,score,courseId,userId])
+    }
   } else {
-    await pool.query("INSERT INTO progress(course_id,user_id,location,status,score)",[courseId,userId,location,status,score])
+    await pool.query("INSERT INTO progress(course_id,user_id,location,status,score) VALUES($1,$2,$3,$4,$5)",[courseId,userId,location,status,score])
   }
   return res.send({success:true})
 })
