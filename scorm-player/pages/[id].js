@@ -81,7 +81,7 @@ const CourseDetail = (props) => {
       setCourse(res.data);
     });
     axios.get("http://localhost:5050/api/progress/"+props.id).then((res)=> {
-        setLearner({...learner,completion_status:res.data.completion_status,location:res.data.location})
+        setLearner(l=>({id:l.id,name:l.name,completion_status:res.data.completion_status,location:res.data.location}))
     })
   }, [props.id]);
   useEffect(() => {
