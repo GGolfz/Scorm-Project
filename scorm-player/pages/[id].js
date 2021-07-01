@@ -71,7 +71,7 @@ const CourseDetail = (props) => {
         if (
           element.includes("location") ||
           element.includes("status") ||
-          element.includes("score")
+          element.includes("score.raw")
         ) {
           let cmiData = window.API_1484_11.cmi;
           if (course != null && learner != null && cmiData != null) {
@@ -190,7 +190,7 @@ const CourseDetail = (props) => {
         if (
           element.includes("location") ||
           element.includes("status") ||
-          element.includes("score")
+          element.includes("score.raw")
         ) {
           if (course != null && learner != null && coreData != null) {
             const data = {
