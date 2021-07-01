@@ -29,18 +29,19 @@ const CourseDetail = (props) => {
       GetValue: (element) => {
         let elementHierarchy = element.split(".");
         if (elementHierarchy.length == 1) {
-          if(!window.API_1484_11) return ""
+          if (!window.API_1484_11) return "";
           return window.API_1484_11[elementHierarchy[0]];
         } else if (elementHierarchy.length == 2) {
-          if(!window.API_1484_11) return ""
-          if(!window.API_1484_11[elementHierarchy[0]]) return ""
+          if (!window.API_1484_11) return "";
+          if (!window.API_1484_11[elementHierarchy[0]]) return "";
           return (
             window.API_1484_11[elementHierarchy[0]][elementHierarchy[1]] ?? ""
           );
         } else if (elementHierarchy.length == 3) {
-          if(!window.API_1484_11) return ""
-          if(!window.API_1484_11[elementHierarchy[0]]) return ""
-          if(!window.API_1484_11[elementHierarchy[0]][elementHierarchy[1]]) return ""
+          if (!window.API_1484_11) return "";
+          if (!window.API_1484_11[elementHierarchy[0]]) return "";
+          if (!window.API_1484_11[elementHierarchy[0]][elementHierarchy[1]])
+            return "";
           return (
             window.API_1484_11[elementHierarchy[0]][elementHierarchy[1]][
               elementHierarchy[2]
@@ -119,26 +120,31 @@ const CourseDetail = (props) => {
       LMSGetValue: (element) => {
         let elementHierarchy = element.split(".");
         if (elementHierarchy.length == 1) {
-          if(!window.API) return ""
+          if (!window.API) return "";
           return window.API[elementHierarchy[0]] ?? "";
         } else if (elementHierarchy.length == 2) {
-          if(!window.API) return ""
-          if(!window.API[elementHierarchy[0]]) return ""
+          if (!window.API) return "";
+          if (!window.API[elementHierarchy[0]]) return "";
           return window.API[elementHierarchy[0]][elementHierarchy[1]] ?? "";
         } else if (elementHierarchy.length == 3) {
-          if(!window.API) return ""
-          if(!window.API[elementHierarchy[0]]) return ""
-          if(!window.API[elementHierarchy[0]][elementHierarchy[1]]) return ""
+          if (!window.API) return "";
+          if (!window.API[elementHierarchy[0]]) return "";
+          if (!window.API[elementHierarchy[0]][elementHierarchy[1]]) return "";
           return (
             window.API[elementHierarchy[0]][elementHierarchy[1]][
               elementHierarchy[2]
             ] ?? ""
           );
         } else if (elementHierarchy.length == 4) {
-          if(!window.API) return ""
-          if(!window.API[elementHierarchy[0]]) return ""
-          if(!window.API[elementHierarchy[0]][elementHierarchy[1]]) return ""
-          if(!window.API[elementHierarchy[0]][elementHierarchy[1]][elementHierarchy[2]]) return ""
+          if (!window.API) return "";
+          if (!window.API[elementHierarchy[0]]) return "";
+          if (!window.API[elementHierarchy[0]][elementHierarchy[1]]) return "";
+          if (
+            !window.API[elementHierarchy[0]][elementHierarchy[1]][
+              elementHierarchy[2]
+            ]
+          )
+            return "";
           return (
             window.API[elementHierarchy[0]][elementHierarchy[1]][
               elementHierarchy[2]
@@ -223,22 +229,27 @@ const CourseDetail = (props) => {
   }, [course, learner]);
 
   useEffect(() => {
-    axios.get("http://localhost:5050/api/course/" + props.id).then((res) => {
-      setCourse(res.data);
-      axios.get("http://localhost:5050/api/progress/" + props.id).then((res) => {
-      setLearner((l) => ({
-        id: l.id,
-        name: l.name,
-        completion_status: res.data.completion_status,
-        location: res.data.location,
-      }));
-    });
-    }).catch((err)=> {
-      if(err.response.data.status == "Not Found") {
-        alert("Content not found")
-        router.push("/");
-      }
-    });
+    axios
+      .get("http://localhost:5050/api/course/" + props.id)
+      .then((res) => {
+        setCourse(res.data);
+        axios
+          .get("http://localhost:5050/api/progress/" + props.id)
+          .then((res) => {
+            setLearner((l) => ({
+              id: l.id,
+              name: l.name,
+              completion_status: res.data.completion_status,
+              location: res.data.location,
+            }));
+          });
+      })
+      .catch((err) => {
+        if (err.response.data.status == "Not Found") {
+          alert("Content not found");
+          router.push("/");
+        }
+      });
   }, [props.id]);
 
   useEffect(() => {
@@ -270,7 +281,6 @@ const CourseDetail = (props) => {
       ) : null}
     </div>
   );
-  
 };
 
 export async function getServerSideProps(ctx) {
