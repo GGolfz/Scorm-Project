@@ -54,7 +54,7 @@ router.post("/progress", async (req,res) => {
   const {courseId,userId,location,status,score} = req.body;
   let exist = await pool.query("SELECT * FROM progress WHERE course_id = $1 AND user_id = $2",[courseId,userId])
   if(exist.rowCount > 0){
-    if(exist.rows[0].status == 1) {
+    if(exist.rows[0].status == 1 && score < exist.rows[0].score) {
       await pool.query("UPDATE progress SET location = $1 WHERE course_id = $2 AND user_id = $3",[location,courseId,userId])
     } else {
       await pool.query("UPDATE progress SET location = $1,status = $2, score = $3 WHERE course_id = $4 AND user_id = $5",[location,status,score,courseId,userId])
