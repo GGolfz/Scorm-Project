@@ -5,7 +5,7 @@ const CourseDetail = (props) => {
   const [course, setCourse] = useState(null);
   const [learner, setLearner] = useState({
     id: 1,
-    name: "Learner",
+    name: "Learner 1",
     location: 0,
     completion_status: false,
   });
@@ -250,13 +250,13 @@ const CourseDetail = (props) => {
         });
   }, [course]);
   return (
-    <div>
-      <h1>{course?.name}</h1>
+    <div className="container">
+      <h1>Course Name: {course?.name}</h1>
       <h2>Hi {learner?.name}</h2>
       <button onClick={() => router.push("/")}>back</button>
       {launchURL ? (
         <iframe
-          style={{ width: "100vw", height: "80vh" }}
+          style={{ width: "100%", height: "80vh" }}
           src={"/content/" + course.name + "/" + launchURL}
         />
       ) : null}

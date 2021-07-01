@@ -6,7 +6,7 @@ const Home = () => {
     axios.get("http://localhost:5050/api/course").then(res=>{setCourse(res.data)})
   },[])
   return (
-    <div>
+    <div className="container">
       <h1>Here are course lists: </h1>
       <ol>
         {
