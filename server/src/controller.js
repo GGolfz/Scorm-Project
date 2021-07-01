@@ -43,9 +43,9 @@ router.get("/progress/:id" , async (req,res) => {
   let exist = await pool.query("SELECT * FROM progress WHERE course_id = $1 AND user_id = $2",[courseId,userId])
   if(exist.rowCount > 0) {
     let data = exist.rows[0]
-    console.log(data)
     return res.send({location:data.location ?? 0,completion_status:data.status == 1})
   } else {
+    await pool.query("INSERT INTO progress(course_id,user_id) VALUES($1,$2)",[courseId,userId])
     return res.send({location:0,completion_status:false})
   }
 
