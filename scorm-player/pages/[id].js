@@ -29,13 +29,23 @@ const CourseDetail = (props) => {
       GetValue: (element) => {
         let elementHierarchy = element.split(".");
         if (elementHierarchy.length == 1) {
+          if(!window.API_1484_11) return ""
           return window.API_1484_11[elementHierarchy[0]];
         } else if (elementHierarchy.length == 2) {
-          return window.API_1484_11[elementHierarchy[0]][elementHierarchy[1]];
+          if(!window.API_1484_11) return ""
+          if(!window.API_1484_11[elementHierarchy[0]]) return ""
+          return (
+            window.API_1484_11[elementHierarchy[0]][elementHierarchy[1]] ?? ""
+          );
         } else if (elementHierarchy.length == 3) {
-          return window.API_1484_11[elementHierarchy[0]][elementHierarchy[1]][
-            elementHierarchy[2]
-          ];
+          if(!window.API_1484_11) return ""
+          if(!window.API_1484_11[elementHierarchy[0]]) return ""
+          if(!window.API_1484_11[elementHierarchy[0]][elementHierarchy[1]]) return ""
+          return (
+            window.API_1484_11[elementHierarchy[0]][elementHierarchy[1]][
+              elementHierarchy[2]
+            ] ?? ""
+          );
         }
       },
       SetValue: (element, val) => {
@@ -109,21 +119,35 @@ const CourseDetail = (props) => {
       LMSGetValue: (element) => {
         let elementHierarchy = element.split(".");
         if (elementHierarchy.length == 1) {
-          return window.API[elementHierarchy[0]];
+          if(!window.API) return ""
+          return window.API[elementHierarchy[0]] ?? "";
         } else if (elementHierarchy.length == 2) {
-          return window.API[elementHierarchy[0]][elementHierarchy[1]];
+          if(!window.API) return ""
+          if(!window.API[elementHierarchy[0]]) return ""
+          return window.API[elementHierarchy[0]][elementHierarchy[1]] ?? "";
         } else if (elementHierarchy.length == 3) {
-          return window.API[elementHierarchy[0]][elementHierarchy[1]][
-            elementHierarchy[2]
-          ];
+          if(!window.API) return ""
+          if(!window.API[elementHierarchy[0]]) return ""
+          if(!window.API[elementHierarchy[0]][elementHierarchy[1]]) return ""
+          return (
+            window.API[elementHierarchy[0]][elementHierarchy[1]][
+              elementHierarchy[2]
+            ] ?? ""
+          );
         } else if (elementHierarchy.length == 4) {
-          return window.API[elementHierarchy[0]][elementHierarchy[1]][
-            elementHierarchy[2]
-          ][elementHierarchy[3]];
+          if(!window.API) return ""
+          if(!window.API[elementHierarchy[0]]) return ""
+          if(!window.API[elementHierarchy[0]][elementHierarchy[1]]) return ""
+          if(!window.API[elementHierarchy[0]][elementHierarchy[1]][elementHierarchy[2]]) return ""
+          return (
+            window.API[elementHierarchy[0]][elementHierarchy[1]][
+              elementHierarchy[2]
+            ][elementHierarchy[3]] ?? ""
+          );
         }
       },
       LMSSetValue: (element, val) => {
-        console.log(element,val)
+        console.log(element, val);
         let elementHierarchy = element.split(".");
         if (elementHierarchy.length == 1) {
           window.API[elementHierarchy[0]] = val;
