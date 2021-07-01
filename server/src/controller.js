@@ -35,7 +35,7 @@ router.get("/course/:id", async (req,res) => {
   const id = req.params.id
   const course = await pool.query("SELECT * FROM courses WHERE course_id = $1",[id])
   if(course.rowCount > 0) return res.send(course.rows[0])
-  return res.status(404)
+  return res.status(404).json({status:"Not Found"})
 })
 router.get("/progress/:id" , async (req,res) => {
   const userId = 1;

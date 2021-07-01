@@ -224,6 +224,11 @@ const CourseDetail = (props) => {
   useEffect(() => {
     axios.get("http://localhost:5050/api/course/" + props.id).then((res) => {
       setCourse(res.data);
+    }).catch((err)=> {
+      if(err.response.data.status == "Not Found") {
+        alert("Content not found")
+        router.push("/");
+      }
     });
     axios.get("http://localhost:5050/api/progress/" + props.id).then((res) => {
       setLearner((l) => ({
