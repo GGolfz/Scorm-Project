@@ -221,16 +221,11 @@ const CourseDetail = (props) => {
     };
     window.API = ScormAPI;
   }, [course, learner]);
+
   useEffect(() => {
     axios.get("http://localhost:5050/api/course/" + props.id).then((res) => {
       setCourse(res.data);
-    }).catch((err)=> {
-      if(err.response.data.status == "Not Found") {
-        alert("Content not found")
-        router.push("/");
-      }
-    });
-    axios.get("http://localhost:5050/api/progress/" + props.id).then((res) => {
+      axios.get("http://localhost:5050/api/progress/" + props.id).then((res) => {
       setLearner((l) => ({
         id: l.id,
         name: l.name,
@@ -238,7 +233,14 @@ const CourseDetail = (props) => {
         location: res.data.location,
       }));
     });
+    }).catch((err)=> {
+      if(err.response.data.status == "Not Found") {
+        alert("Content not found")
+        router.push("/");
+      }
+    });
   }, [props.id]);
+
   useEffect(() => {
     if (course?.name)
       axios
@@ -254,6 +256,7 @@ const CourseDetail = (props) => {
           setLaunchURL(launchURL);
         });
   }, [course]);
+
   return (
     <div className="container">
       <h1>Course Name: {course?.name}</h1>
@@ -267,6 +270,7 @@ const CourseDetail = (props) => {
       ) : null}
     </div>
   );
+  
 };
 
 export async function getServerSideProps(ctx) {
