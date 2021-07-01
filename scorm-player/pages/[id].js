@@ -7,8 +7,9 @@ const CourseDetail = (props) => {
   const [launchURL, setLaunchURL] = useState("");
   const router = useRouter()
   useEffect(() => {
-    const ScormAPI = {
+    const Scorm2004API = {
       Initialize: () => {
+        window.API_1484_11.SetValue("cmi.learner_id", learner.id);
         window.API_1484_11.SetValue("cmi.learner_name", learner.name);
         window.API_1484_11.SetValue("cmi.location",learner.location);
         window.API_1484_11.SetValue("cmi.completion_status",learner.completion_status);
@@ -74,7 +75,7 @@ const CourseDetail = (props) => {
         return 0;
       },
     };
-    window.API_1484_11 = ScormAPI;
+    window.API_1484_11 = Scorm2004API;
   }, [course, learner]);
   useEffect(() => {
     axios.get("http://localhost:5050/api/course/" + props.id).then((res) => {
